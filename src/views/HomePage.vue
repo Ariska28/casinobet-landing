@@ -34,7 +34,7 @@
     @include media-up(md) { 
       background-position: 10% bottom;
       background-size: cover;
-      background-image: url('@/assets/images/background-main.png');
+      background-image: url('@/assets/images/background-main.webp');
     }
 
     @include media-up(xxl) { 

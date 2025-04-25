@@ -2,7 +2,7 @@
   <div class="advertisement">
     <img 
       class="advertisement__image" 
-      src="../assets/images/advertisement.png"
+      src="../assets/images/advertisement.webp"
       alt="advertisement"
     >
   </div>

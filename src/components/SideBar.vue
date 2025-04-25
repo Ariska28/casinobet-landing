@@ -22,11 +22,13 @@
           <checkbox-item 
             class="form-item"
             v-model="formData.agreement1"
+            name="agreement1"
             :isError="error.agreement1"
             label="Мне больше 21 года.<br> Я согласен и принимаю <a href='#'>«Правила приема ставок»</a> и <a href='#'>«Политику конциденциальности»</a>"
           />
 
           <checkbox-item
+            name="agreement2"
             label="Я принимаю участие и согласен с <a href='#'>условиями бонуса</>" 
             v-model="formData.agreement2"
             :isError="error.agreement2"
@@ -64,72 +66,89 @@
   import CheckboxItem from "@/components/form/CheckboxItem.vue";
   import LoaderAnimation from "@/components/LoaderAnimation.vue";
 
-  import { registration } from "@/api/registration.js";
+
   import { isValidBelarusPhone, isPasswordValid  } from "@/helpers/validation.js";
 
-  import { reactive, ref, watch, computed } from "vue";
+  import { watch, computed } from "vue";
 
-  const isLoading = ref(false);
+  import { useStore } from 'vuex';
 
-  const error = reactive({
-    phone: false,
-    password: false,
-    agreement1: false,
-    agreement2: false
-  })
+  const store = useStore();
 
-  const formData = reactive({
-    phone: '',
-    password: '',
-    agreement1: true,
-    agreement2: true,
+  const formData = computed({
+    get: () => store.state.registration.form,
+    set: (value) => {
+      Object.keys(value).forEach(field => {
+        store.commit('registration/UPDATE_FIELD', { field, value: value[field] });
+      });
+    }
   });
 
-  watch(() => formData.phone, () => {
-    error.phone = false;
-  })
+  const error = computed(() => store.state.registration.errors);
+  const isLoading = computed(() => store.state.registration.isSubmitting);
+  const hasErrors = computed(() => store.getters['registration/hasErrors']);
 
-  watch(() => formData.password, () => {
-    error.password = false;
-  })
+  watch(() => formData.value.phone, () => {
+    store.commit('registration/SET_ERROR', { 
+      field: 'phone', 
+      error: false 
+    });
+  });
 
-  const hasErrors = computed(() => Object.values(error).some(Boolean));
+  watch(() => formData.value.password, () => {
+    store.commit('registration/SET_ERROR', { 
+      field: 'password', 
+      error: false 
+    });
+  });
 
-  const onSubmit = async() => { 
-    try {
-      if (!isValidBelarusPhone(formData.phone)) {
-        error.phone = true;
-      }
+  watch(() => formData.value.agreement1, () => {
+    store.commit('registration/SET_ERROR', { 
+      field: 'agreement1', 
+      error: false 
+    });
+  });
 
-      if (!isPasswordValid(formData.password)) {
-        error.password = true;
-      }
+  watch(() => formData.value.agreement2, () => {
+    store.commit('registration/SET_ERROR', { 
+      field: 'agreement2', 
+      error: false 
+    });
+  });
 
-      if (!formData.agreement1) {
-        error.agreement1 = true;
-      } else {
-        error.agreement1 = false;
-      }
-
-      if (!formData.agreement2) {
-        error.agreement2 = true;
-      } else {
-        error.agreement2 = false;
-      }
-
-      if (!hasErrors.value) {
-        isLoading.value = true;
-
-        console.log(formData)
-        const result = await registration(formData);
-        console.log(result);
-      }
-    } catch (error) {
-      console.log(error)
-    } finally {
-      isLoading.value = false;
+  const onSubmit = async () => { 
+    if (!isValidBelarusPhone(formData.value.phone)) {
+      store.commit('registration/SET_ERROR', { 
+        field: 'phone', 
+        error: true 
+      });
     }
+
+    if (!isPasswordValid(formData.value.password)) {
+      store.commit('registration/SET_ERROR', { 
+        field: 'password', 
+        error: true 
+      });
+    }
+
+    if (!formData.value.agreement1) {
+      store.commit('registration/SET_ERROR', { 
+        field: 'agreement1', 
+        error: true 
+      });
+    }
+
+    if (!formData.value.agreement2) {
+      store.commit('registration/SET_ERROR', { 
+        field: 'agreement2', 
+        error: true 
+      });
+    }
+
+  if (!hasErrors.value) {
+    await store.dispatch('registration/submitForm', formData.value);
   }
+};
 </script>
 
 <style scoped lang="scss">
@@ -145,6 +164,7 @@
   background-color: $color-dark;
   display: flex;
   align-items: center;
+  z-index: 200;
 
   @include media-up(md) { 
     top: 0;

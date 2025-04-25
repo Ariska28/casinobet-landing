@@ -6,13 +6,13 @@
       type="checkbox" 
       class="checkbox-input"
       :class="{'is-error': props.isError}" 
-      id="agreement1" 
-      name="agreement1" 
+      :id="props.name" 
+      :name="props.name" 
       :checked="modelValue"
       @change="updateInput"
     >
     <label 
-      for="agreement1" 
+      :for="props.name" 
       class="checkbox-label"
       v-html="props.label"
     > 
@@ -28,6 +28,7 @@ import { defineProps, defineEmits } from 'vue';
   const props = defineProps({
     label: [String, null],
     modelValue: [Boolean, String],
+    name: [String, null],
     isError: Boolean,
   });
 

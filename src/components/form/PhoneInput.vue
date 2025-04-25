@@ -13,6 +13,7 @@
       <img 
         class="phone-group__icon" 
         src="@/assets/images/ic-phone.svg"
+        alt=""
       >
       <input 
         type="tel"

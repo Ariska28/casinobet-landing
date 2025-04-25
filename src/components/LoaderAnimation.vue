@@ -16,9 +16,12 @@
       radial-gradient(farthest-side,#4BD700 94%,#0000) top/8px 8px no-repeat,
       conic-gradient(#0000 30%,#4BD700);
     -webkit-mask: radial-gradient(farthest-side,#0000 calc(100% - 8px),#000 0);
-    animation: l13 1s infinite linear;
+    animation: loader 1s infinite linear;
   }
-  @keyframes l13{ 
-    100%{transform: rotate(1turn)}
+
+  @keyframes loader { 
+    100% {
+      transform: rotate(1turn)
+    }
   }
 </style>

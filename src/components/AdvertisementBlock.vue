@@ -23,6 +23,7 @@
     display: flex;
     align-items: flex-start;
     justify-content: center;
+    overflow: hidden;
 
     @include media-up(md) { 
       align-items: center;
@@ -33,6 +34,8 @@
     width: 110%;
     margin-top: 63px;
 
+    animation: rotateAndGrow 2.5s infinite linear;
+
     @include media-up(sm) { 
       width: 70%;
     }
@@ -41,6 +44,24 @@
       margin-top: -20px;
       width: 42.7%;
       max-height: 456px;
+    }
+  }
+
+  @keyframes rotateAndGrow { 
+    0% {
+      transform: scale(1) rotate(0deg);
+    }
+  
+    10% {
+      transform: scale(1.1) rotate(5deg);
+    }
+  
+    30% {
+      transform: scale(1.1) rotate(-5deg);
+    }
+  
+    40% {
+      transform: scale(1) rotate(0deg);
     }
   }
 </style>

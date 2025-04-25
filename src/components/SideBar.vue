@@ -9,25 +9,27 @@
         <phone-input 
           class="form-item"
           v-model="formData.phone"
-          :isError="isPhoneError"
+          :isError="error.phone"
         />
 
         <password-input 
           class="form-item"
           v-model="formData.password"
-          :isError="isPasswordError"
+          :isError="error.password"
         />
 
-        <div class="form-checkbox">
+        <div class="form-checkbox"> 
           <checkbox-item 
             class="form-item"
             v-model="formData.agreement1"
-            label="Мне больше 21 года.<br> Я согласен и принимаю «Правила приема ставок» и «Политику конциденциальности»"
+            :isError="error.agreement1"
+            label="Мне больше 21 года.<br> Я согласен и принимаю <a href='#'>«Правила приема ставок»</a> и <a href='#'>«Политику конциденциальности»</a>"
           />
 
           <checkbox-item
-            label="Я принимаю участие и согласен с условиями бонуса" 
+            label="Я принимаю участие и согласен с <a href='#'>условиями бонуса</>" 
             v-model="formData.agreement2"
+            :isError="error.agreement2"
           />
         </div>
 
@@ -62,11 +64,19 @@
   import CheckboxItem from "@/components/form/CheckboxItem.vue";
   import LoaderAnimation from "@/components/LoaderAnimation.vue";
 
-  import { reactive, ref, watch } from "vue";
+  import { registration } from "@/api/registration.js";
+  import { isValidBelarusPhone, isPasswordValid  } from "@/helpers/validation.js";
 
-  const isPhoneError = ref(false);
-  const isPasswordError = ref(false);
+  import { reactive, ref, watch, computed } from "vue";
+
   const isLoading = ref(false);
+
+  const error = reactive({
+    phone: false,
+    password: false,
+    agreement1: false,
+    agreement2: false
+  })
 
   const formData = reactive({
     phone: '',
@@ -75,44 +85,49 @@
     agreement2: true,
   });
 
-  watch(() => formData.phone, ()=> {
-    isPhoneError.value = false;
+  watch(() => formData.phone, () => {
+    error.phone = false;
   })
 
-  watch(() => formData.password, ()=> {
-    isPasswordError.value = false;
+  watch(() => formData.password, () => {
+    error.password = false;
   })
 
-  const isValidBelarusPhone = (phone) => {
-    const regex = /^(\+375|375)(25|29|33|44|17)\d{7}$/;
-    return regex.test(phone.replace(/\D/g, ''));
-  }
+  const hasErrors = computed(() => Object.values(error).some(Boolean));
 
-  const isPasswordValid = (password) => {
-    return password.length >= 6;
-  }
+  const onSubmit = async() => { 
+    try {
+      if (!isValidBelarusPhone(formData.phone)) {
+        error.phone = true;
+      }
 
-  const onSubmit = () => {
-    if(!isValidBelarusPhone(formData.phone)) {
-      isPhoneError.value = true;
-    } else {
-      isPhoneError.value = false;
-    }
+      if (!isPasswordValid(formData.password)) {
+        error.password = true;
+      }
 
-    if (!isPasswordValid(formData.password)) {
-      isPasswordError.value = true;
-    } else {
-      isPasswordError.value = false;
-    }
+      if (!formData.agreement1) {
+        error.agreement1 = true;
+      } else {
+        error.agreement1 = false;
+      }
 
-    if (!isPhoneError.value || !isPasswordError.value) {
-      isLoading.value = true;
-      setTimeout(() => {
+      if (!formData.agreement2) {
+        error.agreement2 = true;
+      } else {
+        error.agreement2 = false;
+      }
 
-        window.location.reload();
+      if (!hasErrors.value) {
+        isLoading.value = true;
 
-        isLoading.value = false;
-      },  5000)
+        console.log(formData)
+        const result = await registration(formData);
+        console.log(result);
+      }
+    } catch (error) {
+      console.log(error)
+    } finally {
+      isLoading.value = false;
     }
   }
 </script>

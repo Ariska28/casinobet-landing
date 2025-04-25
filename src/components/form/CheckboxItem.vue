@@ -1,8 +1,11 @@
 <template>  
-  <div class="checkbox-item">
+  <div 
+    class="checkbox-item"
+  >
     <input 
       type="checkbox" 
-      class="checkbox-input" 
+      class="checkbox-input"
+      :class="{'is-error': props.isError}" 
       id="agreement1" 
       name="agreement1" 
       :checked="modelValue"
@@ -25,14 +28,11 @@ import { defineProps, defineEmits } from 'vue';
   const props = defineProps({
     label: [String, null],
     modelValue: [Boolean, String],
+    isError: Boolean,
   });
 
-  const updateInput = (event) => {
-    if(event.target.value === 'on') {
-      emit("update:modelValue", false)
-    } else {
-      emit("update:modelValue", true)
-    }
+  const updateInput = () => {
+    emit("update:modelValue", !props.modelValue)
   }
 </script>
 
@@ -68,6 +68,10 @@ import { defineProps, defineEmits } from 'vue';
     cursor: pointer;
     transition: color 0.15s ease-in-out, background-color 0.15s ease-in-out, border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
     margin: 0;
+
+    &.is-error {
+      border-color: $color-error;
+    }
   }
 
   .checkbox-input:checked {

@@ -28,12 +28,17 @@
     position: relative;
 
     @include media-up(sm) { 
-      background-position: bottom;
+      background-position: 50% 40%;
     }
 
     @include media-up(md) { 
+      background-position: 10% bottom;
       background-size: cover;
       background-image: url('@/assets/images/background-main.png');
+    }
+
+    @include media-up(xxl) { 
+      background-position: center;
     }
   }
 </style>

@@ -32,13 +32,13 @@ jobs:
         uses: actions/configure-pages@v5
       - name: Build with Jekyll
         uses: actions/jekyll-build-pages@v1
-      - name: Clean dist
-        run: |
-          rm -rf dist/*
-          mkdir -p dist
         with:
           source: ./
           destination: ./dist
+      - name: Clean dist
+        run: |
+          rm -rf dist/*
+          mkdir -p dist    
       - name: Install and Build
         run: |
           npm install

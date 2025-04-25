@@ -35,12 +35,12 @@ jobs:
         with:
           source: ./
           destination: ./dist
+      - name: Fix permissions
+        run: sudo chown -R runner:runner /home/runner/work/casinobet-landing/casinobet-landing/dist  
       - name: Clean dist
         run: |
           rm -rf dist/*
           mkdir -p dist  
-      - name: Fix permissions
-        run: sudo chown -R runner:runner /home/runner/work/casinobet-landing/casinobet-landing/dist  
       - name: Install and Build
         run: |
           npm install

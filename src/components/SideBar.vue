@@ -44,7 +44,7 @@
     </div>
 
     <div 
-      v-if="isLoading"
+      v-if="!isLoading"
       class="sidebar-loader"
     >
       <loader-animation/>
@@ -195,6 +195,7 @@
    position: absolute;
    display: flex;
    justify-content: center;
+   align-items: center;
    top: 0;
    left: 0;
    height: 100%;

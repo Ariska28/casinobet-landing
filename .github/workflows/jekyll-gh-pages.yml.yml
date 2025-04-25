@@ -33,14 +33,10 @@ jobs:
       - name: Build with Jekyll
         uses: actions/jekyll-build-pages@v1
         with:
-          source: ./
-          destination: ./dist
+          source: ./dist
+          destination: ./_site
       - name: Fix permissions
         run: sudo chown -R runner:runner /home/runner/work/casinobet-landing/casinobet-landing/dist  
-      - name: Clean dist
-        run: |
-          rm -rf dist/*
-          mkdir -p dist  
       - name: Install and Build
         run: |
           npm install

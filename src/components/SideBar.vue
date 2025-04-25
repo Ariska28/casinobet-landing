@@ -44,7 +44,7 @@
     </div>
 
     <div 
-      v-if="!isLoading"
+      v-if="isLoading"
       class="sidebar-loader"
     >
       <loader-animation/>

@@ -17,6 +17,10 @@
   .nav-bar {
     padding: 35px 16px 6px;
     text-align: center;
+
+    @include media-up(md) { 
+      padding-top: 80px;
+    }
   }
 
   .nav-bar__logo {
@@ -26,7 +30,8 @@
     max-height: 21px;
 
     @include media-up(md) { 
-
+      max-width: 331px;
+      max-height: 41px;
     }
   }
 </style>

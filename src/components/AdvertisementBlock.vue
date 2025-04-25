@@ -38,8 +38,8 @@
     }
 
     @include media-up(md) { 
-      margin-top: 0;
-      width: 42%;
+      margin-top: -20px;
+      width: 42.7%;
       max-height: 456px;
     }
   }

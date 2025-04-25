@@ -16,10 +16,22 @@ h1,h2,h3,h4,h5 {
   margin: 0;
 }
 
+input {
+  outline: none;
+}
+
 a, button {
   cursor: pointer;
 }
 
 * {
   box-sizing: border-box;
+}
+
+.button-clean {
+  border-color: transparent;
+  outline: none;
+  background-color: none;
+  padding: 0;
+  margin: 0;
 }

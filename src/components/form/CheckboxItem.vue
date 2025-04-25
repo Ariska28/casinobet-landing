@@ -5,7 +5,8 @@
       class="checkbox-input" 
       id="agreement1" 
       name="agreement1" 
-      :checked="props.checked"
+      :checked="modelValue"
+      @change="updateInput"
     >
     <label 
       for="agreement1" 
@@ -17,12 +18,22 @@
 </template>
 
 <script setup>
-import { defineProps } from 'vue';
+import { defineProps, defineEmits } from 'vue';
+
+  const emit = defineEmits(["update:modelValue"]);
 
   const props = defineProps({
     label: [String, null],
-    checked: Boolean,
+    modelValue: [Boolean, String],
   });
+
+  const updateInput = (event) => {
+    if(event.target.value === 'on') {
+      emit("update:modelValue", false)
+    } else {
+      emit("update:modelValue", true)
+    }
+  }
 </script>
 
 

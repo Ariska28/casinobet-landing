@@ -18,7 +18,7 @@
   .submit-btn {
     background: $color-accent;
     border-radius: 6px;
-    font-sixe: 14px;
+    font-size: 14px;
     border: none;
     font-family: $font-family;
     color: $color-text;

@@ -1,27 +1,29 @@
-name: Deploy
+name: Deploy to GitHub Pages
+
 on:
   push:
-    branches: [master]
+    branches: [ master ]  # Триггер на пуши в master
+
 jobs:
   deploy:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      
+
       - name: Setup Node
         uses: actions/setup-node@v4
         with:
           node-version: '20'
-          
-      - name: Install and Build
+
+      - name: Install and build
         run: |
           npm install
           npm run build
-          
+
       - name: Deploy
         uses: peaceiris/actions-gh-pages@v3
         with:
-          github_token: ${{ secrets.PAT }}
+          github_token: ${{ secrets.GITHUB_TOKEN }}  # Автоматический токен
           publish_dir: ./dist
-          repo: ariska28/casinobet-landing 
-          force_orphan: true
+          force_orphan: true  # Полная перезапись ветки gh-pages
+          enable_jekyll: false  # Явно отключаем Jekyll
